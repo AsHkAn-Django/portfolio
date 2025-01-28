@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">Are You Sure You Want to Delete This Project?</h2>
+  <div class="card shadow-lg p-4">
+    <div class="card-body text-center">
+      <p class="card-text">This action cannot be undone. Please confirm if you would like to proceed with deleting this project.</p>
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger w-100">Delete Project</button>
+      </form>
+      <a href="{% url 'home' %}" class="btn btn-secondary w-100 mt-3">Cancel</a>
+    </div>
+  </div>
+</div>
+{% endblock content %}
