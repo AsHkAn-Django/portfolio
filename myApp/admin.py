@@ -35,7 +35,7 @@ class ProjectAdmin(admin.ModelAdmin):
             'fields': ('title', 'image', 'image_tag', 'address'),
         }),
         ('Additional Information', {
-            'fields': ('description', 'status'),
+            'fields': ('description', 'status', 'slug', 'meta_title', 'meta_description',),
             'classes': ('collapse',)  # Optional: collapsible extra info
         }),
     )
