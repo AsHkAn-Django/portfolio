@@ -8,17 +8,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(generic.ListView):
-    model = Project
     context_object_name = 'projects'
     template_name = "myApp/index.html"
-    
+
+    def get_queryset(self):
+        return Project.objects.filter(status=Project.Status.PUBLISHED)
+
 
 class AddProjectView(LoginRequiredMixin, generic.CreateView):
     model = Project
     form_class = ProjectForm
     success_url = reverse_lazy('home')
     template_name = "myApp/add_project.html"
-    
+
 
 
 class DeleteProjectView(LoginRequiredMixin, generic.DeleteView):
@@ -28,7 +30,7 @@ class DeleteProjectView(LoginRequiredMixin, generic.DeleteView):
 
     def form_valid(self, form):
       messages.success(self.request, "Project deleted successfully!")
-      return super().form_valid(form)  
+      return super().form_valid(form)
 
 
 class EditProjectView(LoginRequiredMixin, generic.UpdateView):

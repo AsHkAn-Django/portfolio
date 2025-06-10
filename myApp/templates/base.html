@@ -20,9 +20,14 @@
           <li class="nav-item">
             <a class="nav-link text-light" href="{% url 'home' %}">Home</a>
           </li>
+
+          {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link text-light" href="{% url 'add_project' %}">Add</a>
           </li>
+          {% endif %}
+
+
         </ul>
       </div>
     </div>
