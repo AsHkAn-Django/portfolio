@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <header class="bg-dark text-white text-center py-5 mb-5">
+    <h1 class="display-4 fw-bold">Welcome to Ashkan's Portfolio</h1>
+    <p class="lead">A showcase of my projects</p>
+  </header>
+
+  <main class="container py-5">
+    {% if messages %}
+      <section aria-label="Messages" class="mb-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    <article class="card shadow-lg border-0 mx-auto" style="max-width: 700px;">
+      <a href="{{ project.address }}" target="_blank" rel="noopener noreferrer" class="d-block overflow-hidden rounded-top">
+        <img src="{{ project.image.url }}" class="card-img-top img-fluid" alt="{{ project.title }}">
+      </a>
+      <div class="card-body d-flex flex-column">
+        <h2 class="card-title fw-bold text-primary">{{ project.title }}</h2>
+        <p class="card-text text-secondary">{{ project.description }}</p>
+
+        <div class="mt-auto">
+          <a href="{{ project.address }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary w-100 mb-3">
+            Visit Project
+          </a>
+
+          {% if user.is_authenticated %}
+            <div class="d-flex gap-3">
+              <a href="{% url 'edit_project' project.id %}" class="btn btn-outline-primary flex-fill">Edit</a>
+              <a href="{% url 'delete_project' project.id %}" class="btn btn-outline-danger flex-fill">Delete</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  </main>
+{% endblock content %}

@@ -29,6 +29,7 @@
               <h5 class="card-title text-dark">{{ project.title }}</h5>
               <p class="card-text">{{ project.description }}</p>
               <div class="mt-auto">
+                <a href="{% url 'project_detail' project.slug %}" class="btn btn-success w-100 mb-2">See Details</a>
                 <a href="{{ project.address }}" class="btn btn-dark w-100 mb-2">Visit Project</a>
 
                 {% if user.is_authenticated %}

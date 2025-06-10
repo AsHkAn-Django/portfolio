@@ -15,6 +15,12 @@ class IndexView(generic.ListView):
         return Project.objects.filter(status=Project.Status.PUBLISHED)
 
 
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
+    template_name = "myApp/project_detail.html"
+
+
 class AddProjectView(LoginRequiredMixin, generic.CreateView):
     model = Project
     form_class = ProjectForm
