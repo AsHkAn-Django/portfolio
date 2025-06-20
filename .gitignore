@@ -1,6 +1,7 @@
 fixtures/
 media/
 */migrations/
+staticfiles/
 
 
 # Byte-compiled / optimized / DLL files
