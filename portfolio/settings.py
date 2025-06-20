@@ -134,32 +134,42 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# =========================
-# Cloudflare R2 / S3 Storage
-# =========================
+# === Cloudflare R2 via STORAGES setting (path‐style addressing) ===
 
-# 1) Your R2 credentials & bucket from .env
-AWS_ACCESS_KEY_ID     = env.str("R2_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env.str("R2_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = env.str("R2_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL     = env.str("R2_ENDPOINT_URL").rstrip("/")
-# e.g. "https://<accountid>.r2.cloudflarestorage.com"
+# 1) Pull credentials & bucket from env
+R2_BUCKET   = env.str("R2_BUCKET_NAME")
+R2_ENDPOINT = env.str("R2_ENDPOINT_URL").rstrip("/")  # e.g. https://<ACCOUNT_ID>.r2.cloudflarestorage.com
 
-# 2) Essential boto3 settings for R2
-AWS_S3_REGION_NAME       = "auto"
-AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_S3_ADDRESSING_STYLE  = "virtual"  # <bucket>.<endpoint>
+# 2) Common OPTIONS for both storage backends
+R2_OPTIONS = {
+    "access_key": env.str("R2_ACCESS_KEY_ID"),
+    "secret_key": env.str("R2_SECRET_ACCESS_KEY"),
+    "bucket_name": R2_BUCKET,
+    "endpoint_url": R2_ENDPOINT,
+    "region_name": "auto",
+    "signature_version": "s3v4",
+    "addressing_style": "path",     # <endpoint>/<bucket>/<key>
+    "default_acl": "public-read",
+}
 
-# 3) Your “public” domain for serving files
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL.replace('https://','')}"
+# 3) Tell Django 5.1+ about your storages
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": R2_OPTIONS,
+        "LOCATION": "media",     # objects under /media/
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": R2_OPTIONS,
+        "LOCATION": "static",    # objects under /static/
+    },
+}
 
-# 4) Static & media URL prefixes
-STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-MEDIA_URL  = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+# 4) URLs your templates will use
+STATIC_URL = f"https://{R2_ENDPOINT.replace('https://','')}/{R2_BUCKET}/static/"
+MEDIA_URL  = f"https://{R2_ENDPOINT.replace('https://','')}/{R2_BUCKET}/media/"
 
-# 5) Tell Django to use S3Boto3Storage for *all* files
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-DEFAULT_FILE_STORAGE  = "storages.backends.s3boto3.S3Boto3Storage"
-
-# 6) Still define STATIC_ROOT so collectstatic won’t error
+# 5) A dummy STATIC_ROOT so collectstatic won’t crash
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
