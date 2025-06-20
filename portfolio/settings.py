@@ -134,35 +134,32 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Cloudflare R2 credentials from environment variables
-AWS_ACCESS_KEY_ID = env.str("R2_ACCESS_KEY_ID")
+# =========================
+# Cloudflare R2 / S3 Storage
+# =========================
+
+# 1) Your R2 credentials & bucket from .env
+AWS_ACCESS_KEY_ID     = env.str("R2_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env.str("R2_SECRET_ACCESS_KEY")
-
 AWS_STORAGE_BUCKET_NAME = env.str("R2_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = env.str("R2_ENDPOINT_URL")
+AWS_S3_ENDPOINT_URL     = env.str("R2_ENDPOINT_URL").rstrip("/")
+# e.g. "https://<accountid>.r2.cloudflarestorage.com"
 
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}"
+# 2) Essential boto3 settings for R2
+AWS_S3_REGION_NAME       = "auto"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_ADDRESSING_STYLE  = "virtual"  # <bucket>.<endpoint>
 
+# 3) Your “public” domain for serving files
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL.replace('https://','')}"
 
-if DEBUG:
-    # Local static and media files during development
-    STATIC_URL = "/static/"
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-    STATIC_ROOT = BASE_DIR / "staticfiles"
+# 4) Static & media URL prefixes
+STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+MEDIA_URL  = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"
+# 5) Tell Django to use S3Boto3Storage for *all* files
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE  = "storages.backends.s3boto3.S3Boto3Storage"
 
-    # Using default Django storage backends locally
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-
-else:
-    # Production: Serving static and media files from Cloudflare R2
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-
-    # Using S3Boto3Storage backend for both static and media files on Cloudflare R2
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
+# 6) Still define STATIC_ROOT so collectstatic won’t error
+STATIC_ROOT = BASE_DIR / "staticfiles"
