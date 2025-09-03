@@ -26,8 +26,8 @@ Welcome to my GitHub portfolio! This is where I share my projects, experiments, 
 ## Get in Touch  
   
 - Email: `Ashakn.ahrari@gmail.com`  
-- Linkdin: ([https://github.com/yourusername](https://www.linkedin.com/in/ashkan-ahrari/))
-- Website: ([https://codewithashkan.com/])
+- Linkdin: [https://www.linkedin.com/in/ashkan-ahrari/]
+- Website: [https://codewithashkan.com/]
 
 ---
 ⭐️ *Thanks for visiting my portfolio repo!*  
