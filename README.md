@@ -17,17 +17,13 @@ Welcome to my GitHub portfolio! This is where I share my projects, experiments, 
 
 ## Current Focus  
 
-- Building **real-world Django apps**  
-- Improving my **full-stack development skills**  
-- Exploring **security best practices for web apps**  
+- 📧 Email: [Ashakn.ahrari@gmail.com](mailto:Ashakn.ahrari@gmail.com)  
+- 💼 LinkedIn: [linkedin.com/in/ashkan-ahrari](https://www.linkedin.com/in/ashkan-ahrari/)  
+- 🌐 Website: [codewithashkan.com](https://codewithashkan.com/)  
 
 ---
 
-## Get in Touch  
-  
-- Email: `Ashakn.ahrari@gmail.com`  
-- Linkdin: [https://www.linkedin.com/in/ashkan-ahrari/]
-- Website: [https://codewithashkan.com/]
+c
 
 ---
 ⭐️ *Thanks for visiting my portfolio repo!*  
