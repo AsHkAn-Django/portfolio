@@ -33,24 +33,34 @@
         <div class="card project-card rounded-4 overflow-hidden shadow-sm">
             <div class="row g-0">
 
-                <div class="col-lg-4 project-image-col position-relative border-end">
-                    <a href="{% url 'project_detail' project.slug %}" class="d-block h-100 w-100">
-                        {% if project.image %}
-                            <img src="{{ project.image.url }}" class="project-img" alt="{{ project.title }}">
-                        {% else %}
-                            <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
-                                <i class="fa-solid fa-server fa-3x opacity-25"></i>
-                            </div>
-                        {% endif %}
+                <div class="col-lg-4 border-end d-flex flex-column bg-light">
 
-                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0 hover-opacity-100 transition-all" style="background: rgba(15, 23, 42, 0.4);">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-white fa-2x"></i>
+                    <div class="project-image-col flex-grow-1 position-relative" style="min-height: 250px; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+                        <a href="{% url 'project_detail' project.slug %}" class="d-block w-100 h-100">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" class="project-img shadow-sm" alt="{{ project.title }}">
+                            {% else %}
+                                <div class="d-flex align-items-center justify-content-center h-100 w-100 bg-white border rounded text-muted">
+                                    <i class="fa-solid fa-server fa-3x opacity-25"></i>
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <div class="p-3 bg-white border-top">
+                        <div class="d-grid gap-2">
+                            <a href="{{ project.address }}" target="_blank" class="btn btn-dark fw-bold py-2">
+                                <i class="fa-solid fa-bolt me-2 text-warning"></i>Live Demo
+                            </a>
+                            <a href="{% url 'project_detail' project.slug %}" class="btn btn-outline-secondary fw-medium py-2">
+                                View Details & Docs
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="col-lg-8">
-                    <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+                    <div class="card-body p-4 p-lg-5 d-flex flex-column h-100 bg-white">
 
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
@@ -60,8 +70,8 @@
                                 </p>
                             </div>
                             {% if project.github_link %}
-                                <a href="{{ project.github_link }}" target="_blank" class="text-muted hover-dark p-2">
-                                    <i class="fa-brands fa-github fa-xl"></i>
+                                <a href="{{ project.github_link }}" target="_blank" class="text-muted hover-dark p-2" title="View Source Code">
+                                    <i class="fa-brands fa-github fa-2x"></i>
                                 </a>
                             {% endif %}
                         </div>
@@ -69,50 +79,44 @@
                         <hr class="border-light my-3">
 
                         <div class="description-text mb-4">
-                            {{ project.description|truncatewords:60|linebreaks }}
+                            {{ project.description|truncatewords:50|linebreaks }}
                         </div>
 
                         <div class="mt-auto">
                             {% if project.tech_stack %}
-                            <div class="mb-4 d-flex flex-wrap gap-2">
+                            <div class="mb-2">
+                                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Technologies Used:</small>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
                                 {% for tech in project.tech_stack|split:"," %}
                                   <span class="tech-badge">
-                                      {% with t=tech|lower %}
-                                          {% if "python" in t %} <i class="fa-brands fa-python ti-python"></i>
-                                          {% elif "django" in t and "rest" in t %} <i class="fa-solid fa-gear ti-drf"></i> {% elif "django" in t %} <i class="fa-solid fa-layer-group ti-django"></i>
-                                          {% elif "docker" in t %} <i class="fa-brands fa-docker ti-docker"></i>
-                                          {% elif "postgres" in t %} <i class="fa-solid fa-database ti-postgres"></i>
-                                          {% elif "redis" in t %} <i class="fa-solid fa-server ti-redis"></i>
-                                          {% elif "nginx" in t %} <i class="fa-solid fa-network-wired ti-nginx"></i>
-                                          {% elif "celery" in t %} <i class="fa-solid fa-leaf ti-celery"></i>
-                                          {% elif "aws" in t %} <i class="fa-brands fa-aws ti-aws"></i>
-                                          {% elif "linux" in t %} <i class="fa-brands fa-linux ti-linux"></i>
-                                          {% elif "git" in t %} <i class="fa-brands fa-git-alt ti-git"></i>
+                                    {% with t=tech|lower %}
+                                        {% if "python" in t %} <i class="fa-brands fa-python ti-python"></i>
+                                        {% elif "django" in t and "rest" in t %} <i class="fa-solid fa-gear ti-drf"></i> {% elif "django" in t %} <i class="fa-solid fa-layer-group ti-django"></i>
+                                        {% elif "docker" in t %} <i class="fa-brands fa-docker ti-docker"></i>
+                                        {% elif "postgres" in t %} <i class="fa-solid fa-database ti-postgres"></i>
+                                        {% elif "redis" in t %} <i class="fa-solid fa-server ti-redis"></i>
+                                        {% elif "nginx" in t %} <i class="fa-solid fa-network-wired ti-nginx"></i>
+                                        {% elif "celery" in t %} <i class="fa-solid fa-leaf ti-celery"></i>
+                                        {% elif "aws" in t %} <i class="fa-brands fa-aws ti-aws"></i>
+                                        {% elif "linux" in t %} <i class="fa-brands fa-linux ti-linux"></i>
+                                        {% elif "git" in t %} <i class="fa-brands fa-git-alt ti-git"></i>
 
-                                          {% elif "react" in t %} <i class="fa-brands fa-react ti-react"></i>
-                                          {% elif "js" in t or "javascript" in t %} <i class="fa-brands fa-js ti-js"></i>
-                                          {% elif "html" in t %} <i class="fa-brands fa-html5 ti-html"></i>
-                                          {% elif "css" in t %} <i class="fa-brands fa-css3-alt ti-css"></i>
-                                          {% elif "bootstrap" in t %} <i class="fa-brands fa-bootstrap ti-bootstrap"></i>
-                                          {% elif "tailwind" in t %} <i class="fa-solid fa-wind ti-tailwind"></i>
+                                        {% elif "react" in t %} <i class="fa-brands fa-react ti-react"></i>
+                                        {% elif "js" in t or "javascript" in t %} <i class="fa-brands fa-js ti-js"></i>
+                                        {% elif "html" in t %} <i class="fa-brands fa-html5 ti-html"></i>
+                                        {% elif "css" in t %} <i class="fa-brands fa-css3-alt ti-css"></i>
+                                        {% elif "bootstrap" in t %} <i class="fa-brands fa-bootstrap ti-bootstrap"></i>
+                                        {% elif "tailwind" in t %} <i class="fa-solid fa-wind ti-tailwind"></i>
 
-                                          {% else %} <i class="fa-solid fa-code text-secondary"></i>
-                                          {% endif %}
-                                      {% endwith %}
-                                      {{ tech|strip }}
+                                        {% else %} <i class="fa-solid fa-code text-secondary"></i>
+                                        {% endif %}
+                                    {% endwith %}
+                                    {{ tech|strip }}
                                   </span>
                                 {% endfor %}
                             </div>
                             {% endif %}
-
-                            <div class="d-flex gap-3 pt-3 border-top border-light">
-                                <a href="{{ project.address }}" target="_blank" class="btn btn-dark px-4 py-2 text-sm fw-medium rounded-3">
-                                    <i class="fa-solid fa-rocket me-2"></i>Live Demo
-                                </a>
-                                <a href="{% url 'project_detail' project.slug %}" class="btn btn-white border px-4 py-2 text-sm fw-medium rounded-3 text-secondary hover-dark">
-                                    View Details
-                                </a>
-                            </div>
                         </div>
 
                     </div>
