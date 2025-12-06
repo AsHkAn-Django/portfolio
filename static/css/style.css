@@ -1,0 +1,111 @@
+/* 1. GLOBAL VARIABLES */
+:root {
+    --bg-body: #f3f4f6;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --primary: #2563eb;
+    --border-color: #e2e8f0;
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+/* 2. HEADER & GRADIENTS */
+.pro-header {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border: 1px solid #cbd5e1;
+    position: relative;
+    overflow: hidden;
+}
+
+.text-gradient-primary {
+    background: -webkit-linear-gradient(45deg, #2563eb, #0ea5e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 3. CARD DESIGN */
+.project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary);
+}
+
+/* 4. IMAGE FIX (CENTERED & FIXED SIZE) */
+.project-image-col {
+    background-color: #f8fafc; /* Light gray frame background */
+    min-height: 320px;         /* Standard Fixed Height */
+    display: flex;             /* FLEXBOX MAGIC */
+    align-items: center;       /* Vertical Center */
+    justify-content: center;   /* Horizontal Center */
+    padding: 1rem;             /* Padding so image doesn't touch edges */
+    border-right: 1px solid var(--border-color);
+}
+
+.project-img {
+    max-width: 100%;           /* Never go wider than container */
+    max-height: 100%;          /* Never go taller than container */
+    width: auto;               /* Keep original width */
+    height: auto;              /* Keep original height */
+    object-fit: contain;       /* Show WHOLE image, no cropping/stretching */
+    border-radius: 4px;        /* Slight rounded corners for the image itself */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Subtle shadow behind image */
+}
+
+/* 5. TYPOGRAPHY & BADGES */
+.description-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.tech-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3em 0.7em;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+}
+
+.tech-badge:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* Dynamic Icon Colors */
+.ti-python { color: #eab308; }
+.ti-django { color: #059669; }
+.ti-docker { color: #0ea5e9; }
+.ti-react { color: #3b82f6; }
+.ti-postgres { color: #336791; }
+.ti-redis { color: #dc2626; }
+.ti-nginx { color: #009639; }
+.ti-aws { color: #ff9900; }
+.ti-drf { color: #a30000; }     /* Django REST Framework (Red) */
+.ti-celery { color: #37814a; }  /* Celery (Green) */
+.ti-linux { color: #fcc624; }   /* Linux (Yellow) */
+.ti-git { color: #f1502f; }     /* Git (Orange) */
+.ti-html { color: #e34c26; }    /* HTML (Orange) */
+.ti-css { color: #264de4; }     /* CSS (Blue) */
+.ti-js { color: #f7df1e; }      /* JS (Yellow) */
+.ti-bootstrap { color: #7952b3; } /* Bootstrap (Purple) */
+.ti-tailwind { color: #06b6d4; }  /* Tailwind (Cyan) */

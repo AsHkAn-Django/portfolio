@@ -28,11 +28,14 @@ class ProjectAdmin(admin.ModelAdmin):
     list_editable = ('status',)
     list_filter = ('status',)
     search_fields = ('title', 'address')
-    ordering = ('status', 'title')
+    ordering = ('-priority_order', 'pk')
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'image', 'image_tag', 'address'),
+            'fields': (
+                'title', 'image', 'image_tag', 'address', 'github_link',
+                'tech_stack', 'priority_order',
+            ),
         }),
         ('Additional Information', {
             'fields': ('description', 'status', 'slug', 'meta_title', 'meta_description',),

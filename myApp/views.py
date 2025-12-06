@@ -12,7 +12,7 @@ class IndexView(generic.ListView):
     template_name = "myApp/index.html"
 
     def get_queryset(self):
-        return Project.objects.filter(status=Project.Status.PUBLISHED)
+        return Project.objects.filter(status=Project.Status.PUBLISHED).order_by('-priority_order', '-id')
 
 
 

@@ -1,71 +1,118 @@
 {% extends 'base.html' %}
-
-{% block title %}{{ project.meta_title }}{% endblock %}
-
-{% block meta %}
-  <meta name="description" content="{{ project.meta_description }}">
-
-  <!-- Open Graph Tags -->
-  <meta property="og:title" content="{{ project.meta_title }}">
-  <meta property="og:description" content="{{ project.meta_description }}">
-  <meta property="og:image" content="{{ project.image.url }}">
-  <meta property="og:url" content="{{ request.build_absolute_uri }}">
-{% endblock %}
+{% load static %}
+{% load custom_filters %}
 
 {% block content %}
-  <header class="bg-dark text-white text-center py-5 mb-5">
-    <h1 class="display-4 fw-bold">Welcome to Ashkan's Portfolio</h1>
-    <p class="lead">A showcase of my projects</p>
-  </header>
+<div class="bg-white border-bottom sticky-top" style="z-index: 10;">
+    <div class="container py-3 d-flex align-items-center justify-content-between">
+        <a href="{% url 'home' %}" class="text-decoration-none text-muted fw-bold small hover-dark">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back to Projects
+        </a>
+    </div>
+</div>
 
-  <main class="container py-5">
-    {% if messages %}
-      <section aria-label="Messages" class="mb-4">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      </section>
-    {% endif %}
+<div class="container py-5">
+    <div class="row gx-lg-5">
 
-    <article class="card shadow-lg border-0 mx-auto" style="max-width: 700px;">
-      <a href="{{ project.address }}" target="_blank" rel="noopener noreferrer" class="d-block overflow-hidden rounded-top">
-        <img src="{{ project.image.url }}" class="card-img-top img-fluid" alt="{{ project.title }}">
-      </a>
-      <div class="card-body d-flex flex-column">
-        <h2 class="card-title fw-bold text-primary">{{ project.title }}</h2>
-        <p class="card-text text-secondary">{{ project.summary }}</p>
+        <div class="col-lg-8">
 
-        <div class="mt-auto">
-          <a href="{{ project.address }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary w-100 mb-3">
-            Visit Project
-          </a>
-
-          <!-- Social Sharing Buttons -->
-          <div class="d-flex gap-3 justify-content-center mb-3">
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-              </svg>
-            </a>
-
-            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ project.meta_title }}" target="_blank">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
-                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-              </svg>
-            </a>
-          </div>
-
-          {% if user.is_authenticated %}
-            <div class="d-flex gap-3 my-4">
-              <a href="{% url 'edit_project' project.id %}" class="btn btn-outline-primary flex-fill">Edit</a>
-              <a href="{% url 'delete_project' project.id %}" class="btn btn-outline-danger flex-fill">Delete</a>
+            <div class="mb-4">
+                <h1 class="fw-bold h2 text-dark mb-2">{{ project.title }}</h1>
+                <p class="text-secondary mb-0" style="font-size: 1.05rem;">{{ project.summary }}</p>
             </div>
-          {% endif %}
+
+            <div class="rounded-4 overflow-hidden border mb-5" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                <div class="d-flex align-items-center justify-content-center p-4" style="min-height: 400px;">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="img-fluid rounded shadow-sm" style="max-height: 500px; width: auto; object-fit: contain;" alt="{{ project.title }}">
+                    {% else %}
+                        <div class="text-center text-muted opacity-25">
+                            <i class="fa-solid fa-image fa-4x mb-3"></i>
+                            <p>No Preview Available</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="project-prose">
+                <h3 class="fw-bold h4 text-dark mb-3 border-bottom pb-2">Technical Overview</h3>
+                <div class="description-text fs-6 text-dark opacity-75" style="line-height: 1.8;">
+                    {{ project.description|linebreaks }}
+                </div>
+            </div>
         </div>
-      </div>
-    </article>
-  </main>
+
+        <div class="col-lg-4 mt-5 mt-lg-0">
+            <div class="card border bg-white rounded-4 p-4 shadow-sm sticky-top" style="top: 5rem;">
+
+                <h6 class="fw-bold text-uppercase text-muted small mb-3 tracking-wide">Deployment</h6>
+
+                <div class="d-flex align-items-center justify-content-between mb-4 p-3 bg-light rounded-3 border">
+                    <span class="small fw-semibold text-secondary">Status</span>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-circle fa-2xs me-2"></i>Production
+                    </span>
+                </div>
+
+                <div class="d-grid gap-2 mb-4">
+                    <a href="{{ project.address }}" target="_blank" class="btn btn-primary fw-bold py-2 shadow-sm">
+                        <i class="fa-solid fa-rocket me-2"></i>View Live App
+                    </a>
+                    {% if project.github_link %}
+                    <a href="{{ project.github_link }}" target="_blank" class="btn btn-white border fw-semibold py-2 hover-bg-light text-dark">
+                        <i class="fa-brands fa-github me-2"></i>Source Code
+                    </a>
+                    {% endif %}
+                </div>
+
+                <hr class="border-light my-4">
+
+                {% if project.tech_stack %}
+                <div class="mb-3">
+                    <h6 class="fw-bold text-uppercase text-muted small mb-3 tracking-wide">Technology Stack</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for tech in project.tech_stack|split:"," %}
+                          <span class="tech-badge">
+                              {% with t=tech|lower %}
+                                  {% if "python" in t %} <i class="fa-brands fa-python ti-python"></i>
+                                  {% elif "django" in t and "rest" in t %} <i class="fa-solid fa-gear ti-drf"></i> {% elif "django" in t %} <i class="fa-solid fa-layer-group ti-django"></i>
+                                  {% elif "docker" in t %} <i class="fa-brands fa-docker ti-docker"></i>
+                                  {% elif "postgres" in t %} <i class="fa-solid fa-database ti-postgres"></i>
+                                  {% elif "redis" in t %} <i class="fa-solid fa-server ti-redis"></i>
+                                  {% elif "nginx" in t %} <i class="fa-solid fa-network-wired ti-nginx"></i>
+                                  {% elif "celery" in t %} <i class="fa-solid fa-leaf ti-celery"></i>
+                                  {% elif "aws" in t %} <i class="fa-brands fa-aws ti-aws"></i>
+                                  {% elif "linux" in t %} <i class="fa-brands fa-linux ti-linux"></i>
+                                  {% elif "git" in t %} <i class="fa-brands fa-git-alt ti-git"></i>
+
+                                  {% elif "react" in t %} <i class="fa-brands fa-react ti-react"></i>
+                                  {% elif "js" in t or "javascript" in t %} <i class="fa-brands fa-js ti-js"></i>
+                                  {% elif "html" in t %} <i class="fa-brands fa-html5 ti-html"></i>
+                                  {% elif "css" in t %} <i class="fa-brands fa-css3-alt ti-css"></i>
+                                  {% elif "bootstrap" in t %} <i class="fa-brands fa-bootstrap ti-bootstrap"></i>
+                                  {% elif "tailwind" in t %} <i class="fa-solid fa-wind ti-tailwind"></i>
+
+                                  {% else %} <i class="fa-solid fa-code text-secondary"></i>
+                                  {% endif %}
+                              {% endwith %}
+                              {{ tech|strip }}
+                          </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <div class="mt-4 pt-3 border-top">
+                    <a href="{% url 'edit_project' project.id %}" class="btn btn-sm btn-outline-secondary w-100">
+                        <i class="fa-solid fa-pen me-1"></i> Edit Project
+                    </a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock content %}
