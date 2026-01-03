@@ -1,129 +1,580 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
 
-{% block content %}
-<div class="container py-5">
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Code With Ashkan</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <div class="pro-header mb-5 py-5 px-4 rounded-4 text-center shadow-sm">
-        <div class="position-relative" style="z-index: 1;">
-            <div class="d-inline-block mb-3">
-                <span class="badge bg-white text-secondary border fw-medium rounded-pill px-3 py-2 shadow-sm">
-                    <i class="fa-solid fa-code-branch me-2 text-primary"></i>Backend & DevOps
-                </span>
-            </div>
-            <h1 class="fw-bold display-5 mb-3 text-dark">Featured Projects</h1>
-            <p class="lead text-secondary mx-auto mb-4" style="max-width: 650px; line-height: 1.7;">
-                Production-grade infrastructure and scalable systems built with
-                <span class="text-gradient-primary fw-bold">Django</span> &
-                <span class="text-dark fw-bold">Docker</span>.
-            </p>
-            <div class="d-flex justify-content-center gap-3 opacity-75 small text-uppercase fw-bold tracking-wide">
-                <span><i class="fa-solid fa-server me-1"></i> Nginx</span>
-                <span class="text-muted">•</span>
-                <span><i class="fa-brands fa-docker me-1"></i> Docker</span>
-                <span class="text-muted">•</span>
-                <span><i class="fa-solid fa-shield-halved me-1"></i> CI/CD</span>
-            </div>
-        </div>
-    </div>
+        {% autoescape off %}
+        <style>
+            html {
+                scroll-behavior: smooth;
+            }
+            #footer {
+                background-image: url("{% static 'images/overlay.png' %}"), url("{% static 'images/bg.jpg' %}");
+            }
+            #header {
+                background-image: url("{% static 'images/overlay.png' %}"), url("{% static 'images/bg.jpg' %}");
+            }
+            #footer {
+                background-color: transparent !important;
+                background-image: none !important;
+            }
 
-    <div class="d-flex flex-column gap-5">
-        {% for project in projects %}
-        <div class="card project-card rounded-4 overflow-hidden shadow-sm">
-            <div class="row g-0">
+            @media screen and (max-width: 980px) {
+                #footer {
+                    background-color: #1f1815 !important;
+                    background-image: url("{% static 'images/overlay.png' %}"), url("{% static 'images/bg.jpg' %}") !important;
+                }
+            }
+            .work-item .image {
+                display: block;
+                position: relative;
+                overflow: hidden;
+                border-radius: 4px;
+                margin-bottom: 1.5em;
+            }
+            .work-item .image img {
+                width: 100%;
+                height: 250px;
+                object-fit: cover;
+                border-radius: 4px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+            }
+            .work-item .image:hover img {
+                transform: scale(1.05);
+                box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+                filter: brightness(70%);
+            }
+            .tech-stack {
+                margin-top: 15px;
+                margin-bottom: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .tech-badge {
+                font-size: 0.65rem;
+                font-weight: 600;
+                padding: 0.3em 0.4em;
+                border-radius: 4px;
+                background-color: #f8fafc;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                transition: all 0.2s;
+                text-decoration: none !important;
+                border-bottom: none !important;
+                line-height: 1;
+            }
+            .tech-badge:hover {
+                background-color: #f1f5f9;
+                border-color: #cbd5e1;
+                transform: translateY(-1px);
+            }
+            .ti-python { color: #eab308; }
+            .ti-django { color: #059669; }
+            .ti-docker { color: #0ea5e9; }
+            .ti-react { color: #3b82f6; }
+            .ti-postgres { color: #336791; }
+            .ti-redis { color: #dc2626; }
+            .ti-nginx { color: #009639; }
+            .ti-aws { color: #ff9900; }
+            .ti-drf { color: #a30000; }
+            .ti-celery { color: #37814a; }
+            .ti-linux { color: #fcc624; }
+            .ti-git { color: #f1502f; }
+            .ti-html { color: #e34c26; }
+            .ti-css { color: #264de4; }
+            .ti-js { color: #f7df1e; }
+            .ti-bootstrap { color: #7952b3; }
+            .ti-tailwind { color: #06b6d4; }
 
-                <div class="col-lg-4 border-end d-flex flex-column bg-light">
+            .icon:before { font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 5 Free" !important; }
+            .icon.brands:before { font-family: "Font Awesome 6 Brands" !important; }
+            .icon.solid:before { font-family: "Font Awesome 6 Free" !important; font-weight: 900; }
+        </style>
+        {% endautoescape %}
+	</head>
+	<body class="is-preload">
 
-                    <div class="project-image-col flex-grow-1 position-relative" style="min-height: 250px; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
-                        <a href="{% url 'project_detail' project.slug %}" class="d-block w-100 h-100">
-                            {% if project.image %}
-                                <img src="{{ project.image.url }}" class="project-img shadow-sm" alt="{{ project.title }}">
-                            {% else %}
-                                <div class="d-flex align-items-center justify-content-center h-100 w-100 bg-white border rounded text-muted">
-                                    <i class="fa-solid fa-server fa-3x opacity-25"></i>
-                                </div>
-                            {% endif %}
-                        </a>
-                    </div>
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="#" class="image avatar"><img src="{% static 'images/ashkan.png' %}" alt="Ashkan Ahrari" /></a>
+                    <h1><strong>Hi, I am Ashkan</strong></h1>
+                    <br />
+                    <p>Backend & DevOps Engineer<br />
+                    Specializing in Django, Docker,<br />
+                    and Scalable Architecture.</p>
+				</div>
+			</header>
 
-                    <div class="p-3 bg-white border-top">
-                        <div class="d-grid gap-2">
-                            <a href="{{ project.address }}" target="_blank" class="btn btn-dark fw-bold py-2">
-                                <i class="fa-solid fa-bolt me-2 text-warning"></i>Live Demo
-                            </a>
-                            <a href="{% url 'project_detail' project.slug %}" class="btn btn-outline-secondary fw-medium py-2">
-                                View Details & Docs
-                            </a>
-                        </div>
-                    </div>
-                </div>
+		<!-- Main -->
+			<div id="main">
 
-                <div class="col-lg-8">
-                    <div class="card-body p-4 p-lg-5 d-flex flex-column h-100 bg-white">
+				<!-- One -->
+                <section id="one">
+                        <header class="major">
+                            <h2>Building production-grade infrastructure<br />
+                            and robust backend systems.</h2>
+                        </header>
+                        <p>I specialize in Python and Django development, deploying containerized applications using Docker and CI/CD pipelines. My focus is on writing clean, testable code and managing seamless deployments to VPS environments.</p>
+                        <ul class="actions">
+                            <li><a href="#three" class="button">Contact Me</a></li>
+                        </ul>
+                    </section>
 
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <h2 class="fw-bold h3 mb-1 text-dark">{{ project.title }}</h2>
-                                <p class="text-primary small fw-semibold mb-0">
-                                    {{ project.summary }}
-                                </p>
-                            </div>
-                            {% if project.github_link %}
-                                <a href="{{ project.github_link }}" target="_blank" class="text-muted hover-dark p-2" title="View Source Code">
-                                    <i class="fa-brands fa-github fa-2x"></i>
+				<!-- Two -->
+					<section id="two">
+                        <h2>Featured Projects</h2>
+                        <div class="row">
+
+                            {% for project in projects %}
+                            <article class="col-6 col-12-xsmall work-item">
+                                <a href="{% url 'project_detail' project.slug %}" class="image fit">
+                                    {% if project.image %}
+                                        <img src="{{ project.image.url }}" alt="{{ project.title }}" />
+                                    {% else %}
+                                        <img src="{% static 'images/thumbs/01.jpg' %}" alt="Placeholder" />
+                                    {% endif %}
                                 </a>
-                            {% endif %}
+
+                                <a href="{% url 'project_detail' project.slug %}" style="border-bottom: none;">
+                                    <h3>{{ project.title }}</h3>
+                                </a>
+                                <p>{{ project.summary }}</p>
+
+                                {% if project.tech_stack %}
+                                    <div class="tech-stack">
+                                        {% for tech in project.tech_stack|split:"," %}
+                                            <span class="tech-badge">
+                                                {% with t=tech|lower %}
+                                                    {% if "python" in t %} <i class="fa-brands fa-python ti-python"></i>
+                                                    {% elif "django" in t and "rest" in t %} <i class="fa-solid fa-gear ti-drf"></i>
+                                                    {% elif "django" in t %} <i class="fa-solid fa-layer-group ti-django"></i>
+                                                    {% elif "docker" in t %} <i class="fa-brands fa-docker ti-docker"></i>
+                                                    {% elif "postgres" in t %} <i class="fa-solid fa-database ti-postgres"></i>
+                                                    {% elif "redis" in t %} <i class="fa-solid fa-server ti-redis"></i>
+                                                    {% elif "nginx" in t %} <i class="fa-solid fa-network-wired ti-nginx"></i>
+                                                    {% elif "celery" in t %} <i class="fa-solid fa-leaf ti-celery"></i>
+                                                    {% elif "aws" in t %} <i class="fa-brands fa-aws ti-aws"></i>
+                                                    {% elif "linux" in t %} <i class="fa-brands fa-linux ti-linux"></i>
+                                                    {% elif "git" in t %} <i class="fa-brands fa-git-alt ti-git"></i>
+                                                    {% elif "react" in t %} <i class="fa-brands fa-react ti-react"></i>
+                                                    {% elif "js" in t or "javascript" in t %} <i class="fa-brands fa-js ti-js"></i>
+                                                    {% elif "html" in t %} <i class="fa-brands fa-html5 ti-html"></i>
+                                                    {% elif "css" in t %} <i class="fa-brands fa-css3-alt ti-css"></i>
+                                                    {% elif "bootstrap" in t %} <i class="fa-brands fa-bootstrap ti-bootstrap"></i>
+                                                    {% elif "tailwind" in t %} <i class="fa-solid fa-wind ti-tailwind"></i>
+                                                    {% else %} <i class="fa-solid fa-code text-secondary"></i>
+                                                    {% endif %}
+                                                {% endwith %}
+                                                {{ tech|strip }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                </article>
+                            {% empty %}
+                                <p>No projects found. Please add some via admin panel.</p>
+                            {% endfor %}
+
                         </div>
 
-                        <hr class="border-light my-3">
+                        {% if user.is_authenticated %}
+                        <ul class="actions">
+                            <li><a href="{% url 'add_project' %}" class="button">Add New Project</a></li>
+                        </ul>
+                        {% endif %}
+                    </section>
 
-                        <div class="description-text mb-4">
-                            {{ project.description|truncatewords:50|linebreaks }}
-                        </div>
+				<!-- Three -->
+					<section id="three">
+						<h2>Get In Touch</h2>
+						<p>I am currently open to freelance work and full-time opportunities. Feel free to reach out to discuss your project.</p>
+						<div class="row">
+							<div class="col-8 col-12-small">
+								<form method="post" action="#">
+									<div class="row gtr-uniform gtr-50">
+										<div class="col-6 col-12-xsmall"><input type="text" name="name" id="name" placeholder="Name" /></div>
+										<div class="col-6 col-12-xsmall"><input type="email" name="email" id="email" placeholder="Email" /></div>
+										<div class="col-12"><textarea name="message" id="message" placeholder="Message" rows="4"></textarea></div>
+									</div>
+								</form>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</div>
+							<div class="col-4 col-12-small">
+								<ul class="labeled-icons">
+									<li>
+										<h3 class="icon solid fa-home"><span class="label">Address</span></h3>
+										Isparta, Turkey<br />
 
-                        <div class="mt-auto">
-                            {% if project.tech_stack %}
-                            <div class="mb-2">
-                                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Technologies Used:</small>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2">
-                                {% for tech in project.tech_stack|split:"," %}
-                                  <span class="tech-badge">
-                                    {% with t=tech|lower %}
-                                        {% if "python" in t %} <i class="fa-brands fa-python ti-python"></i>
-                                        {% elif "django" in t and "rest" in t %} <i class="fa-solid fa-gear ti-drf"></i> {% elif "django" in t %} <i class="fa-solid fa-layer-group ti-django"></i>
-                                        {% elif "docker" in t %} <i class="fa-brands fa-docker ti-docker"></i>
-                                        {% elif "postgres" in t %} <i class="fa-solid fa-database ti-postgres"></i>
-                                        {% elif "redis" in t %} <i class="fa-solid fa-server ti-redis"></i>
-                                        {% elif "nginx" in t %} <i class="fa-solid fa-network-wired ti-nginx"></i>
-                                        {% elif "celery" in t %} <i class="fa-solid fa-leaf ti-celery"></i>
-                                        {% elif "aws" in t %} <i class="fa-brands fa-aws ti-aws"></i>
-                                        {% elif "linux" in t %} <i class="fa-brands fa-linux ti-linux"></i>
-                                        {% elif "git" in t %} <i class="fa-brands fa-git-alt ti-git"></i>
+									</li>
+									<li>
+										<h3 class="icon solid fa-mobile-alt"><span class="label">Phone</span></h3>
+										+905392249849
+									</li>
+									<li>
+										<h3 class="icon solid fa-envelope"><span class="label">Email</span></h3>
+										<a href="mailto:ashkan.ahrari@gmail.com">ashkan.ahrari@gmail.com</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</section>
 
-                                        {% elif "react" in t %} <i class="fa-brands fa-react ti-react"></i>
-                                        {% elif "js" in t or "javascript" in t %} <i class="fa-brands fa-js ti-js"></i>
-                                        {% elif "html" in t %} <i class="fa-brands fa-html5 ti-html"></i>
-                                        {% elif "css" in t %} <i class="fa-brands fa-css3-alt ti-css"></i>
-                                        {% elif "bootstrap" in t %} <i class="fa-brands fa-bootstrap ti-bootstrap"></i>
-                                        {% elif "tailwind" in t %} <i class="fa-solid fa-wind ti-tailwind"></i>
+				<!-- Four -->
+				<!--
+					<section id="four">
+						<h2>Elements</h2>
 
-                                        {% else %} <i class="fa-solid fa-code text-secondary"></i>
-                                        {% endif %}
-                                    {% endwith %}
-                                    {{ tech|strip }}
-                                  </span>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                        </div>
+						<section>
+							<h4>Text</h4>
+							<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+							This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+							This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
+							<hr />
+							<header>
+								<h4>Heading with a Subtitle</h4>
+								<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+							</header>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+							<header>
+								<h5>Heading with a Subtitle</h5>
+								<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+							</header>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+							<hr />
+							<h2>Heading Level 2</h2>
+							<h3>Heading Level 3</h3>
+							<h4>Heading Level 4</h4>
+							<h5>Heading Level 5</h5>
+							<h6>Heading Level 6</h6>
+							<hr />
+							<h5>Blockquote</h5>
+							<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+							<h5>Preformatted</h5>
+							<pre><code>i = 0;
 
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-{% endblock content %}
+while (!deck.isInOrder()) {
+print 'Iteration ' + i;
+deck.shuffle();
+i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
+						</section>
+
+						<section>
+							<h4>Lists</h4>
+							<div class="row">
+								<div class="col-6 col-12-xsmall">
+									<h5>Unordered</h5>
+									<ul>
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Sagittis adipiscing lorem eleifend.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+									</ul>
+									<h5>Alternate</h5>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Sagittis adipiscing lorem eleifend.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+									</ul>
+								</div>
+								<div class="col-6 col-12-xsmall">
+									<h5>Ordered</h5>
+									<ol>
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Etiam vel felis at lorem sed viverra.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Etiam vel felis at lorem sed viverra.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+									</ol>
+									<h5>Icons</h5>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+										<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+										<li><a href="#" class="icon brands fa-tumblr"><span class="label">Tumblr</span></a></li>
+									</ul>
+								</div>
+							</div>
+							<h5>Actions</h5>
+							<ul class="actions">
+								<li><a href="#" class="button primary">Default</a></li>
+								<li><a href="#" class="button">Default</a></li>
+							</ul>
+							<ul class="actions small">
+								<li><a href="#" class="button primary small">Small</a></li>
+								<li><a href="#" class="button small">Small</a></li>
+							</ul>
+							<div class="row">
+								<div class="col-6 col-12-small">
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+								</div>
+								<div class="col-6 col-12-small">
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary small">Small</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+									</ul>
+								</div>
+								<div class="col-6 col-12-small">
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary fit">Default</a></li>
+										<li><a href="#" class="button fit">Default</a></li>
+									</ul>
+								</div>
+								<div class="col-6 col-12-small">
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary small fit">Small</a></li>
+										<li><a href="#" class="button small fit">Small</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<section>
+							<h4>Table</h4>
+							<h5>Default</h5>
+							<div class="table-wrapper">
+								<table>
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Item One</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item Two</td>
+											<td>Vis ac commodo adipiscing arcu aliquet.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item Three</td>
+											<td> Morbi faucibus arcu accumsan lorem.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item Four</td>
+											<td>Vitae integer tempus condimentum.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item Five</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2"></td>
+											<td>100.00</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+
+							<h5>Alternate</h5>
+							<div class="table-wrapper">
+								<table class="alt">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Item One</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item Two</td>
+											<td>Vis ac commodo adipiscing arcu aliquet.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item Three</td>
+											<td> Morbi faucibus arcu accumsan lorem.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item Four</td>
+											<td>Vitae integer tempus condimentum.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item Five</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2"></td>
+											<td>100.00</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</section>
+
+						<section>
+							<h4>Buttons</h4>
+							<ul class="actions">
+								<li><a href="#" class="button primary">Primary</a></li>
+								<li><a href="#" class="button">Default</a></li>
+							</ul>
+							<ul class="actions">
+								<li><a href="#" class="button large">Large</a></li>
+								<li><a href="#" class="button">Default</a></li>
+								<li><a href="#" class="button small">Small</a></li>
+							</ul>
+							<ul class="actions fit">
+								<li><a href="#" class="button primary fit">Fit</a></li>
+								<li><a href="#" class="button fit">Fit</a></li>
+							</ul>
+							<ul class="actions fit small">
+								<li><a href="#" class="button primary fit small">Fit + Small</a></li>
+								<li><a href="#" class="button fit small">Fit + Small</a></li>
+							</ul>
+							<ul class="actions">
+								<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+								<li><a href="#" class="button icon solid fa-download">Icon</a></li>
+							</ul>
+							<ul class="actions">
+								<li><span class="button primary disabled">Primary</span></li>
+								<li><span class="button disabled">Default</span></li>
+							</ul>
+						</section>
+
+						<section>
+							<h4>Form</h4>
+							<form method="post" action="#">
+								<div class="row gtr-uniform gtr-50">
+									<div class="col-6 col-12-xsmall">
+										<input type="text" name="demo-name" id="demo-name" value="" placeholder="Name" />
+									</div>
+									<div class="col-6 col-12-xsmall">
+										<input type="email" name="demo-email" id="demo-email" value="" placeholder="Email" />
+									</div>
+									<div class="col-12">
+										<select name="demo-category" id="demo-category">
+											<option value="">- Category -</option>
+											<option value="1">Manufacturing</option>
+											<option value="1">Shipping</option>
+											<option value="1">Administration</option>
+											<option value="1">Human Resources</option>
+										</select>
+									</div>
+									<div class="col-4 col-12-small">
+										<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+										<label for="demo-priority-low">Low Priority</label>
+									</div>
+									<div class="col-4 col-12-small">
+										<input type="radio" id="demo-priority-normal" name="demo-priority">
+										<label for="demo-priority-normal">Normal Priority</label>
+									</div>
+									<div class="col-4 col-12-small">
+										<input type="radio" id="demo-priority-high" name="demo-priority">
+										<label for="demo-priority-high">High Priority</label>
+									</div>
+									<div class="col-6 col-12-small">
+										<input type="checkbox" id="demo-copy" name="demo-copy">
+										<label for="demo-copy">Email me a copy of this message</label>
+									</div>
+									<div class="col-6 col-12-small">
+										<input type="checkbox" id="demo-human" name="demo-human" checked>
+										<label for="demo-human">I am a human and not a robot</label>
+									</div>
+									<div class="col-12">
+										<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+									</div>
+									<div class="col-12">
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="primary" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</div>
+								</div>
+							</form>
+						</section>
+
+						<section>
+							<h4>Image</h4>
+							<h5>Fit</h5>
+							<div class="box alt">
+								<div class="row gtr-50 gtr-uniform">
+									<div class="col-12"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"05.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"01.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"02.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"03.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"04.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"05.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"06.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"03.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"02.jpg" alt="" /></span></div>
+									<div class="col-4"><span class="image fit"><img src="{% static 'images/fulls/01.jpg' %}"01.jpg" alt="" /></span></div>
+								</div>
+							</div>
+							<h5>Left &amp; Right</h5>
+							<p><span class="image left"><img src="images/avatar.jpg" alt="" /></span>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+							<p><span class="image right"><img src="images/avatar.jpg" alt="" /></span>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+						</section>
+
+					</section>
+
+
+			</div>
+        -->
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<ul class="icons">
+						<li><a href="https://github.com/AsHkAn-Django" class="icon brands fa-github"><span class="label">Github</span></a></li>
+						<li><a href="https://www.linkedin.com/in/ashkan-ahrari/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+						<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+                        <li><a href="https://www.upwork.com/freelancers/~01da7811288ac228da" class="icon brands fa-upwork"><span class="label">Upwork</span></a></li>
+					</ul>
+					<ul class="copyright">
+						<li>&copy; Ashkan Ahrari</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.poptrox.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
+	</body>
+</html>
