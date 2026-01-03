@@ -32,14 +32,14 @@
                     background-image: url("{% static 'images/overlay.png' %}"), url("{% static 'images/bg.jpg' %}") !important;
                 }
             }
-            .work-item .image {
+            .work-item .project-link {
                 display: block;
                 position: relative;
                 overflow: hidden;
                 border-radius: 4px;
                 margin-bottom: 1.5em;
             }
-            .work-item .image img {
+            .work-item .project-link img {
                 width: 100%;
                 height: 250px;
                 object-fit: cover;
@@ -47,7 +47,7 @@
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
                 transition: transform 0.3s ease;
             }
-            .work-item .image:hover img {
+            .work-item .project-link:hover img {
                 transform: scale(1.05);
                 box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
                 filter: brightness(70%);
@@ -109,7 +109,7 @@
 		<!-- Header -->
 			<header id="header">
 				<div class="inner">
-					<a href="#" class="image avatar"><img src="{% static 'images/ashkan.png' %}" alt="Ashkan Ahrari" /></a>
+					<a href="#" class="image avatar"><img src="{% static 'images/avatar.png' %}" alt="Ashkan Ahrari" /></a>
                     <h1><strong>Hi, I am Ashkan</strong></h1>
                     <br />
                     <p>Backend & DevOps Engineer<br />
@@ -140,7 +140,7 @@
 
                             {% for project in projects %}
                             <article class="col-6 col-12-xsmall work-item">
-                                <a href="{% url 'project_detail' project.slug %}" class="image fit">
+                                <a href="{% url 'project_detail' project.slug %}" class="project-link fit">
                                     {% if project.image %}
                                         <img src="{{ project.image.url }}" alt="{{ project.title }}" />
                                     {% else %}
