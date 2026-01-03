@@ -1,0 +1,68 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  test:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install flake8 black pytest pytest-django
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run Black (Formatting)
+        run: black --check .
+
+      - name: Run Flake8 (Linting)
+        run: flake8 .
+
+  deploy:
+    name: Deploy to VPS
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            # Navigate to folder (Create it manually on VPS first if it doesn't exist)
+            mkdir -p /home/portfolio
+            cd /home/portfolio
+
+            # Pull changes
+            git checkout .
+            git pull origin main
+
+            # Restart Docker
+            docker compose down
+            docker compose up -d --build
+
+            # Run Migrations
+            docker compose exec -T web python manage.py migrate
+
+            # Push Static to Cloudflare R2
+            docker compose exec -T web python manage.py collectstatic --noinput
+
+            # Clean up
+            docker system prune -f

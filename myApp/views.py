@@ -6,14 +6,14 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
 class IndexView(generic.ListView):
-    context_object_name = 'projects'
+    context_object_name = "projects"
     template_name = "myApp/index.html"
 
     def get_queryset(self):
-        return Project.objects.filter(status=Project.Status.PUBLISHED).order_by('-priority_order', '-id')
-
+        return Project.objects.filter(status=Project.Status.PUBLISHED).order_by(
+            "-priority_order", "-id"
+        )
 
 
 class ProjectDetailView(generic.DetailView):
@@ -24,24 +24,22 @@ class ProjectDetailView(generic.DetailView):
 class AddProjectView(LoginRequiredMixin, generic.CreateView):
     model = Project
     form_class = ProjectForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
     template_name = "myApp/add_project.html"
-
 
 
 class DeleteProjectView(LoginRequiredMixin, generic.DeleteView):
     model = Project
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
     template_name = "myApp/delete_project.html"
 
     def form_valid(self, form):
-      messages.success(self.request, "Project deleted successfully!")
-      return super().form_valid(form)
+        messages.success(self.request, "Project deleted successfully!")
+        return super().form_valid(form)
 
 
 class EditProjectView(LoginRequiredMixin, generic.UpdateView):
     model = Project
     form_class = ProjectForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
     template_name = "myApp/edit_project.html"
-

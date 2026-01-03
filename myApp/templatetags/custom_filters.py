@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def split(value, key):
     """
@@ -17,6 +18,7 @@ def split(value, key):
         value = str(value)
 
     return value.split(key)
+
 
 @register.filter
 def strip(value):
