@@ -1,6 +1,12 @@
 # Ashkan Ahrari | Portfolio Website
+[![Deploy Portfolio](https://github.com/AsHkAn-Django/portfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/AsHkAn-Django/portfolio/actions/workflows/deploy.yml)
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+![Django](https://img.shields.io/badge/django-5.0-green.svg)
+![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
 > **Live Demo:** [codewithashkan.com](https://codewithashkan.com)
+>
 
 A production-grade, containerized portfolio website built to showcase my backend engineering and DevOps projects. Unlike standard static portfolios, this is a full-stack Django application running inside Docker, served via Nginx, and deployed automatically using GitHub Actions.
 
