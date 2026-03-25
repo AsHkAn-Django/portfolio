@@ -92,9 +92,6 @@ This project uses a Continuous Deployment (CD) pipeline:
 
 ## Contact
 
-- Email: [Ashakn.ahrari@gmail.com](mailto:Ashakn.ahrari@gmail.com)
-- LinkedIn: [linkedin.com/in/ashkan-ahrari](https://www.linkedin.com/in/ashkan-ahrari/)
-- Website: [codewithashkan.com](https://codewithashkan.com/)
 - Upwork: [Hire me on Upwork](https://www.upwork.com/freelancers/~01da7811288ac228da)
 ---
 
